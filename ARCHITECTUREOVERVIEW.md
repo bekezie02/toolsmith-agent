@@ -14,9 +14,9 @@ For newcomers to the codebase. See [README.md](./README.md) for a high-level sum
 
 ## How a run works, conceptually
 1. A time-based Apps Script trigger fires a per-goal schedule file.
-2. That file invokes the shared `agentLoop()`.
-3. `agentLoop()` loads the AGENT/TOOLS/SKILLS docs and calls `planner()`, which asks the LLM (via `llm()`) what to do next given the goal and available tools.
-4. The planner's chosen tool calls run through `execute()`, which dispatches to the actual tool functions in `util.gs`.
+2. The run starts in the shared `planner()`.
+3. It loads the AGENT/TOOLS/SKILLS docs and uses `llm()` to generate an initial plan for the task. It then calls `agentLoop()`, which drives the ongoing execution loop, asking the LLM (via `llm()`) what to do next given the goal and available tools. The loop continues to execute the chosen actions and re-ask the model until the task is complete.
+4. The `agentLoop()` chosen tool calls run through `execute()`, which dispatches to the actual tool functions in `util.gs`.
 5. State (sent-history, caches, etc.) is persisted via `db.gs`'s hash-table-over-Sheets layer.
 
 ## Skills (pluggable goals)
